@@ -84,7 +84,7 @@ class AuthService {
           },
         }
       );
-      const link = process.env.FRONTEND_URL+"/reset-password/"+forgetToken;
+      const link = process.env.FRONTEND_URL + "/reset-password/" + forgetToken;
       const msg = `Dear ${user.name}, <br/>
             If you have requested to reset the password, please click the link below.
             Or you can ignore this message.
@@ -108,3 +108,4 @@ class AuthService {
 const authSvc = new AuthService(); //singleton pattern
 module.exports = authSvc;
 //services used for database update
+//
