@@ -88,7 +88,7 @@ class AuthService {
       const msg = `Dear ${user.name}, <br/>
             If you have requested to reset the password, please click the link below.
             Or you can ignore this message.
-            <br/>
+            <br/> 
             <a href="${link}">
             ${link}
         </a> 
