@@ -1,5 +1,4 @@
 require("dotenv").config();
-const { required } = require("joi");
 const { randomString } = require("../../config/helpers.config");
 const authSvc = require("./auth.service");
 const bcrypt = require("bcryptjs");
@@ -11,11 +10,12 @@ class AuthController {
   register = async (req, res, next) => {
     try {
       const payload = req.body;
-
       // images
       // none, single, array
-      console.log(req.files);
       if (req.files) {
+        // if (req.file) {
+
+        // payload.image = req.file.filename;
         payload.image = req.files[0].filename;
       }
       // if (req.files) {
