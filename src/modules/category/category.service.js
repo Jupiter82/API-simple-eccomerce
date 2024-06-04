@@ -1,7 +1,7 @@
 const slugify = require("slugify");
-const BrandModel = require("./brand.model");
+const CategoryModel = require("./category.model");
 
-class BrandService {
+class CategoryService {
   transformRequest = (req, isEdit = false) => {
     const data = {
       ...req.body, // title, status, url, image, createdBy
@@ -18,10 +18,13 @@ class BrandService {
         data.image = req.file.filename;
       }
     }
-    //slug is generated
-    //text specialchars numbs text
-    //text-number-text // remove special characters
-    //Apple Brand ===> Apple-Brand ===> apple-brand
+    // subCategory = id
+    // null
+    //converting string into null
+    if (data.subCategory === "null" || data.subCategory === "") {
+      data.subCategory = null;
+    }
+
     if (!isEdit) {
       data.slug = slugify(data.title, { replacement: "-", lower: true });
       data.createdBy = req.authUser._id;
@@ -31,18 +34,18 @@ class BrandService {
     return data;
   };
 
-  createdBrand = async (data) => {
+  createdCategory = async (data) => {
     try {
-      const brand = new BrandModel(data);
-      return await brand.save(); //store
+      const category = new CategoryModel(data);
+      return await category.save(); //store
     } catch (exception) {
       throw exception;
     }
   };
 
-  updateBrand = async (id, data) => {
+  updateCategory = async (id, data) => {
     try {
-      let status = await BrandModel.findByIdAndUpdate(id, { $set: data });
+      let status = await CategoryModel.findByIdAndUpdate(id, { $set: data });
       return status;
     } catch (exception) {
       throw exception;
@@ -50,13 +53,15 @@ class BrandService {
   };
 
   getCount = async (filter = {}) => {
-    const count = await BrandModel.countDocuments(filter);
+    const count = await CategoryModel.countDocuments(filter);
     return count;
   };
   getOneByFilter = async (filter) => {
     try {
       //object if find or null
-      const data = await BrandModel.findOne(filter)
+      const data = await CategoryModel.findOne(filter)
+        //fetch _id and name
+        .populate("subCategory", ["_id", "title"])
         .populate("createdBy", ["_id", "name", "role"])
         .populate("updatedBy", ["_id", "name", "role"]);
 
@@ -66,9 +71,10 @@ class BrandService {
     }
   };
 
-  getAllBrands = async ({ limit = 10, skip = 0, filter = {} }) => {
+  getAllCategories = async ({ limit = 10, skip = 0, filter = {} }) => {
     try {
-      let data = await BrandModel.find(filter)
+      let data = await CategoryModel.find(filter)
+        .populate("subCategory", ["_id", "title"])
         .populate("createdBy", ["_id", "name", "role"])
         .populate("updatedBy", ["_id", "name", "role"])
         .sort({ _id: "desc" })
@@ -82,11 +88,11 @@ class BrandService {
 
   deleteById = async (id) => {
     try {
-      let response = await BrandModel.findByIdAndDelete(id);
+      let response = await CategoryModel.findByIdAndDelete(id);
       if (!response) {
         throw {
           code: 404,
-          message: "Brand does not exist or already deleted.",
+          message: "Category does not exist or already deleted.",
         };
       } else {
         return response;
@@ -97,5 +103,5 @@ class BrandService {
   };
 }
 
-const brandSvc = new BrandService();
-module.exports = brandSvc;
+const categorySvc = new CategoryService();
+module.exports = categorySvc;

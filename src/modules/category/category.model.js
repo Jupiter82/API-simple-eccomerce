@@ -1,43 +1,50 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const BrandSchema = new mongoose.Schema({
-    title:{
-        type: String,
-        min: 2,
-        required:true,
-        unique:true,
+const CategorySchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      min: 2,
+      required: true,
+      unique: true,
     },
-    slug:{
-        type: String,
-        unique:true,
-        required:true,
+    slug: {
+      type: String,
+      unique: true,
+      required: true,
     },
-    tagline:String,
-    status:{
-        type:String,
-        enum:['active','inactive'],
-        default: "inactive"
+    subCategory: {
+      type: mongoose.Types.ObjectId,
+      default: null,
+      ref: "Category",
     },
-    image:{
-        type: String,
-        required:true
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "inactive",
     },
-    createdBy:{
-        type: mongoose.Types.ObjectId,
-        ref: "User",
-        default: null
+    image: {
+      type: String,
+      required: true,
     },
-    updatedBy:{
-        type: mongoose.Types.ObjectId,
-        ref: "User",
-        default: null
-    }
-},{
-    autoCreate:true,
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    updatedBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+  },
+  {
+    autoCreate: true,
     autoIndex: true,
-    timestamps:true
-})
+    timestamps: true,
+  }
+);
 
-const BrandModel = mongoose.model("Brand", BrandSchema)
+const CategoryModel = mongoose.model("Category", CategorySchema);
 
-module.exports = BrandModel;
+module.exports = CategoryModel;

@@ -3,48 +3,48 @@ const { USER_ROLES } = require("../../config/constants.config");
 const authCheck = require("../../middlewares/auth.middleware");
 const PermissionCheck = require("../../middlewares/rbac.middleware");
 const { validator } = require("../../middlewares/validator.middleware");
-const brandCtrl = require("./brand.controller");
-const { brandCreateSchema } = require("./brand.request");
+const categoryCtrl = require("./category.controller");
+const { categoryCreateSchema } = require("./category.request");
 const uploader = require("../../middlewares/uploader.middleware");
 
 // router.post('/',authCheck, PermissionCheck('admin'), "control")
 
-//brand/view
-router.get("/home", brandCtrl.listForHome);
+//category/view
+router.get("/home", categoryCtrl.listForHome);
 
-// brand/post/dashboard
+// category/post/dashboard
 router
   .route("/")
   .post(
     authCheck,
     PermissionCheck(USER_ROLES.superadmin),
     uploader.single("image"),
-    validator(brandCreateSchema),
-    brandCtrl.createBrand
+    validator(categoryCreateSchema),
+    categoryCtrl.createCategory
   )
 
   .get(
     authCheck,
     PermissionCheck(USER_ROLES.superadmin),
-    brandCtrl.listAllBrands
+    categoryCtrl.listAllCategories
   );
 router
   .route("/:id")
   .get(
     authCheck,
     PermissionCheck(USER_ROLES.superadmin),
-    brandCtrl.getBrandDetail
+    categoryCtrl.getCategoryDetail
   )
   .put(
     authCheck,
     PermissionCheck(USER_ROLES.superadmin),
     uploader.single("image"),
-    validator(brandCreateSchema),
-    brandCtrl.updateById
+    validator(categoryCreateSchema),
+    categoryCtrl.updateById
   )
   .delete(
     authCheck,
     PermissionCheck(USER_ROLES.superadmin),
-    brandCtrl.deleteById
+    categoryCtrl.deleteById
   );
 module.exports = router;
